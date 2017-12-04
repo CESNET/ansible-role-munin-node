@@ -1,13 +1,14 @@
 ---
 munin_node_bind_host: "*"
 munin_node_bind_port: "4949"
-
+munin_node_log: /var/log/munin/munin-node.log
+munin_node_pid: /var/run/munin/munin-node.pid
 munin_node_host_name: ''
 
-# Munin requires IPs be added as regular expressions.
+# munin2.cesnet.cz
 munin_node_allowed_ips:
-  - '^127\.0\.0\.1$'
-  - '^::1$'
+  - '^78\.128\.211\.251$'
+  - '^2001:718:1:1f:50:56ff:feee:251$'
 
 # Source and destination of munin plugins.
 munin_plugin_src_path: /usr/share/munin/plugins/
