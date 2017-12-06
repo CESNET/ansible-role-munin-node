@@ -1,7 +1,57 @@
-{% for section,directives in munin_node_config.iteritems() %}
-[{{section}}]
-{% for name,val in directives.iteritems() %}
-{{ name }} {{ val }}
-{% endfor %}
+# This file is used to configure how the plugins are invoked.
+# Place in /etc/munin/plugin-conf.d/ or corresponding directory.
+#
+# PLEASE NOTE: Changes in the plugin-conf.d directory are only
+# read at munin-node startup, so restart at any changes.
+#
+# user <user>         # Set the user to run the plugin as.
+# group <group>       # Set the group to run the plugin as.
+# command <command>   # Run <command> instead of the plugin. %c expands to
+#                       what would normally be run.
+# env.<variable> <value> # Sets <variable> in the plugin's environment, see the
+#                       individual plugins to find out which variables they
+#                       care about.
 
-{% endfor %}
+[df*]
+env.warning 92
+env.critical 98
+env.exclude_re ^/run/user
+
+[exim_mailqueue]
+group adm, (Debian-exim)
+
+[exim_mailstats]
+group adm, (Debian-exim)
+env.logdir /var/log/exim4/
+env.logname mainlog
+
+[fw_conntrack]
+user root
+
+[fw_forwarded_local]
+user root
+
+[fw_packets]
+user root
+
+[hddtemp_smartctl]
+user root
+
+[hddtemp2]
+user root
+
+[if_*]
+user root
+
+[if_err_*]
+user nobody
+
+[ip_*]
+user root
+
+[ipmi_*]
+user root
+
+[smart_*]
+user root
+

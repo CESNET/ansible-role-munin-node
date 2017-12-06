@@ -14,18 +14,22 @@
 - name: Generate plugin configuration.
   template:
     src: plugin-conf.j2
-    dest: /etc/munin/plugin-conf.d/ansible.conf
+    dest: /etc/munin/plugin-conf.d/plugins.conf
     owner: root
     group: root
     mode: 0644
   notify: restart munin-node
 
-- name: Enable additional plugins.
+- name: Enable automatic plugins.
+  shell: munin-node-configure --shell --families auto,manual 2>/dev/null | bash
+  notify: restart munin-node
+
+- name: Enable manual plugins.
   file:
     path: "{{ munin_plugin_dest_path }}{{ item.name }}"
-    src: "{{ munin_plugin_src_path }}{{ item.plugin | default( item.name ) }}"
+    src: "{{ munin_plugin_src_path }}{{ item.plugin }}"
     state: link
-  with_items: "{{ munin_node_plugins }}"
+  with_items: "{{ munin_node_plugins_manual }}"
   notify: restart munin-node
 
 - name: Ensure munin-node is running.
