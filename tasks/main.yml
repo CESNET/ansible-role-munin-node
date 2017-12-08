@@ -21,7 +21,7 @@
   notify: restart munin-node
 
 - name: Enable automatic plugins.
-  shell: munin-node-configure --shell --families auto,manual 2>/dev/null | bash
+  shell: munin-node-configure --shell --families auto,manual --remove-also 2>/dev/null | bash
   notify: restart munin-node
 
 - name: Enable manual plugins.
