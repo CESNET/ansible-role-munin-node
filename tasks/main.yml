@@ -20,6 +20,14 @@
     mode: 0644
   notify: restart munin-node
 
+
+# v pripade pluginu ip_
+# je mozne, ze automaticky urci nejake divne adresy
+# pokud by bylo potreba tyhle adresy vyhodit, tak:
+# - pustit automaticke pluginy
+# - odebrat vybrane linky
+# - pustit manualni pluginy
+
 - name: Enable automatic plugins.
   shell: munin-node-configure --shell --families auto,manual --remove-also 2>/dev/null | bash
   notify: restart munin-node
