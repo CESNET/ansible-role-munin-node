@@ -1,44 +1,6 @@
 ---
-- name: Ensure munin-node is installed (Debian).
-  apt: name=munin-node state=installed
-
-- name: Copy munin-node configuration.
-  template:
-    src: munin-node.conf.j2
-    dest: /etc/munin/munin-node.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart munin-node
-
-- name: Generate plugin configuration.
-  template:
-    src: plugin-conf.j2
-    dest: /etc/munin/plugin-conf.d/plugins.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart munin-node
+- name: run munin-node task
+  include: munin-node.yml
+  when: full_config
 
 
-# v pripade pluginu ip_
-# je mozne, ze automaticky urci nejake divne adresy
-# pokud by bylo potreba tyhle adresy vyhodit, tak:
-# - pustit automaticke pluginy
-# - odebrat vybrane linky
-# - pustit manualni pluginy
-
-- name: Enable automatic plugins.
-  shell: munin-node-configure --shell --families auto,manual --remove-also 2>/dev/null | bash
-  notify: restart munin-node
-
-- name: Enable manual plugins.
-  file:
-    path: "{{ munin_plugin_dest_path }}{{ item.name }}"
-    src: "{{ munin_plugin_src_path }}{{ item.plugin }}"
-    state: link
-  with_items: "{{ munin_node_plugins_manual }}"
-  notify: restart munin-node
-
-- name: Ensure munin-node is running.
-  service: name=munin-node state=started enabled=yes
